@@ -12,6 +12,7 @@ from bot.helper.thumbnail import get_image
 from bot.telegram import work_loads, multi_clients
 from aiohttp_session import get_session
 from bot.jisshu import Telegramm
+from bot.config import telegram
 from bot.helper.exceptions import FIleNotFound, InvalidHash
 from bot.helper.index import get_files, posts_file
 from bot.server.custom_dl import ByteStreamer
