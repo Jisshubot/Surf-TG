@@ -11,7 +11,7 @@ from bot.helper.search import search
 from bot.helper.thumbnail import get_image
 from bot.telegram import work_loads, multi_clients
 from aiohttp_session import get_session
-from bot.config import Telegram
+from bot.jisshu import Telegramm
 from bot.helper.exceptions import FIleNotFound, InvalidHash
 from bot.helper.index import get_files, posts_file
 from bot.server.custom_dl import ByteStreamer
@@ -41,7 +41,7 @@ async def login_route(request):
     username = data.get('username')
     password = data.get('password')
     error_message = None
-    if (username == Telegram.USERNAME and password == Telegram.PASSWORD) or (username == Telegram.ADMIN_USERNAME and password == Telegram.ADMIN_PASSWORD):
+    if (username == Telegramm.USERNAME and password == Telegramm.PASSWORD) or (username == Telegramm.ADMIN_USERNAME and password == Telegramm.ADMIN_PASSWORD):
         session['user'] = username
         if 'redirect_url' not in session:
             session['redirect_url'] = '/'
@@ -63,7 +63,7 @@ async def logout_route(request):
 @routes.post('/create')
 async def create_route(request):
     session = await get_session(request)
-    if (username := session.get('user')) != Telegram.ADMIN_USERNAME:
+    if (username := session.get('user')) != Telegramm.ADMIN_USERNAME:
         return web.json_response({'msg': 'Who the hell you are'})
     data = await request.post()
     folderName = data.get('folderName')
@@ -80,7 +80,7 @@ async def create_route(request):
 @routes.post('/delete')
 async def delete_route(request):
     session = await get_session(request)
-    if (username := session.get('user')) != Telegram.ADMIN_USERNAME:
+    if (username := session.get('user')) != Telegramm.ADMIN_USERNAME:
         return web.json_response({'msg': 'Who the hell you are'})
     data = await request.json()
     id = data.get('delete_id')
@@ -96,7 +96,7 @@ async def delete_route(request):
 @routes.post('/edit')
 async def editFolder_route(request):
     session = await get_session(request)
-    if (username := session.get('user')) != Telegram.ADMIN_USERNAME:
+    if (username := session.get('user')) != Telegramm.ADMIN_USERNAME:
         return web.json_response({'msg': 'Who the hell you are'})
     data = await request.post()
     folderName = data.get('folderName')
@@ -115,7 +115,7 @@ async def editFolder_route(request):
 @routes.post('/edit_post')
 async def editPost_route(request):
     session = await get_session(request)
-    if (username := session.get('user')) != Telegram.ADMIN_USERNAME:
+    if (username := session.get('user')) != Telegramm.ADMIN_USERNAME:
         return web.json_response({'msg': 'Who the hell you are'})
     data = await request.post()
     fileName = data.get('fileName')
@@ -134,7 +134,7 @@ async def editPost_route(request):
 @routes.get('/searchDbFol')
 async def searchDbFolder_route(request):
     session = await get_session(request)
-    if (username := session.get('user')) != Telegram.ADMIN_USERNAME:
+    if (username := session.get('user')) != Telegramm.ADMIN_USERNAME:
         return web.json_response({'msg': 'Who the hell you are'})
     query = request.query.get('query', '')
     folder_names = await db.search_DbFolder(query)
@@ -206,7 +206,7 @@ async def playlist_route(request):
             text = await db.get_info(parent_id)
             dhtml = await post_playlist(playlists)
             dphtml = await posts_db_file(files)
-            is_admin = username == Telegram.ADMIN_USERNAME
+            is_admin = username == Telegramm.ADMIN_USERNAME
             return web.Response(text=await render_page(parent_id, None, route='playlist', playlist=dhtml, database=dphtml, msg=text, is_admin=is_admin), content_type='text/html')
         except Exception as e:
             logging.critical(e.with_traceback(None))
@@ -223,7 +223,7 @@ async def dbsearch_route(request):
         parent = request.match_info['parent']
         page = request.query.get('page', '1')
         query = request.query.get('q')
-        is_admin = username == Telegram.ADMIN_USERNAME
+        is_admin = username == Telegramm.ADMIN_USERNAME
         try:
             files = await db.search_dbfiles(id=parent, page=page, query=query)
             dphtml = await posts_db_file(files)
@@ -245,7 +245,7 @@ async def channel_route(request):
         chat_id = request.match_info['chat_id']
         chat_id = f"-100{chat_id}"
         page = request.query.get('page', '1')
-        is_admin = username == Telegram.ADMIN_USERNAME
+        is_admin = username == Telegramm.ADMIN_USERNAME
         try:
             posts = await get_files(chat_id, page=page)
             phtml = await posts_file(posts, chat_id)
@@ -267,7 +267,7 @@ async def search_route(request):
         chat_id = f"-100{chat_id}"
         page = request.query.get('page', '1')
         query = request.query.get('q')
-        is_admin = username == Telegram.ADMIN_USERNAME
+        is_admin = username == Telegramm.ADMIN_USERNAME
         try:
             posts = await search(chat_id, page=page, query=query)
             phtml = await posts_file(posts, chat_id)
