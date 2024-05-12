@@ -1,10 +1,10 @@
 from asyncio import gather, create_task
 from bot.telegram import StreamBot
-from bot.config import Telegram
+from bot.jisshu import Telegramm
 
 
 async def get_chats():
-    return [{"chat-id": chat.id, "title": chat.title or chat.first_name, "type": chat.type.name} for chat in await gather(*[create_task(StreamBot.get_chat(int(channel_id))) for channel_id in Telegram.AUTH_CHANNEL])]
+    return [{"chat-id": chat.id, "title": chat.title or chat.first_name, "type": chat.type.name} for chat in await gather(*[create_task(StreamBot.get_chat(int(channel_id))) for channel_id in Telegramm.AUTH_CHANNEL])]
 
 
 async def posts_chat(channels):
