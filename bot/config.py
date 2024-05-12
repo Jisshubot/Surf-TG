@@ -10,6 +10,8 @@ class Telegram:
     BOT_TOKEN = getenv("BOT_TOKEN")
     PORT = int(getenv("PORT", "8080"))
     BASE_URL = getenv("BASE_URL").rstrip('/')
+    AUTH_CHANNEL = [channel.strip()
+                    for channel in getenv("AUTH_CHANNEL").split(",")]
     DATABASE_URL = getenv("DATABASE_URL")
     SLEEP_THRESHOLD = int(getenv('SLEEP_THRESHOLD', '60'))
     WORKERS = int(getenv('WORKERS', '10'))
