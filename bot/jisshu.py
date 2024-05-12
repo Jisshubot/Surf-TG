@@ -1,6 +1,6 @@
 from os import getenv
 
-
+class Telegramm:
 AUTH_CHANNEL = [channel.strip()for channel in getenv("AUTH_CHANNEL").split(",")]
 THEME = getenv("THEME", "quartz")
 USERNAME = getenv("USERNAME", "admin")
