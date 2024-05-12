@@ -185,7 +185,7 @@ async def home_route(request):
             playlists = await db.get_Dbfolder()
             phtml = await posts_chat(channels)
             dhtml = await post_playlist(playlists)
-            is_admin = username == Telegram.ADMIN_USERNAME
+            is_admin = username == Telegramm.ADMIN_USERNAME
             return web.Response(text=await render_page(None, None, route='home', html=phtml, playlist=dhtml, is_admin=is_admin), content_type='text/html')
         except Exception as e:
             logging.critical(e.with_traceback(None))
